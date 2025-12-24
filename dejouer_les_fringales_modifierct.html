@@ -1,0 +1,1742 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Déjouer les fringales — Coach Will (Reboot 90)</title>
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --panel:#121216;
+      --panel2:#15151b;
+      --text:#f3f3f5;
+      --muted:#b7b7c2;
+      --orange:#ff6a00;
+      --orange2:#ff8a2a;
+      --stroke:rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.55);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,106,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 90% 0%, rgba(255,138,42,.10), transparent 55%),
+        radial-gradient(900px 600px at 70% 110%, rgba(255,106,0,.08), transparent 60%),
+        linear-gradient(180deg, #060607, var(--bg) 30%, #080809);
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 18px 80px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(10,10,12,.86), rgba(10,10,12,.62));
+      border-bottom:1px solid var(--stroke);
+    }
+    .topbar-inner{
+      max-width:1200px; margin:0 auto; padding:14px 18px;
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width: 220px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,106,0,1), rgba(0,0,0,1));
+      box-shadow: 0 10px 18px rgba(255,106,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo::after{
+      content:""; position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 45%);
+      transform: rotate(18deg);
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .brand .sub{
+      font-size:12px; color:var(--muted); margin-top:2px;
+    }
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(22,22,28,.9), rgba(14,14,18,.9));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      user-select:none;
+      display:flex; align-items:center; gap:8px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.35);
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,106,0,.45); box-shadow: 0 10px 22px rgba(0,0,0,.45);}
+    .btn:active{ transform: translateY(0px) scale(.99);}
+    .pill{
+      font-size:11px; padding:3px 8px; border-radius:999px;
+      background: rgba(255,106,0,.12);
+      border:1px solid rgba(255,106,0,.25);
+      color: #ffd6b8;
+    }
+    .btn.active{
+      border-color: rgba(255,106,0,.7);
+      background: linear-gradient(180deg, rgba(255,106,0,.18), rgba(15,15,18,.92));
+    }
+    .cover{
+      margin-top:22px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(900px 600px at 10% 10%, rgba(255,106,0,.35), transparent 55%),
+        radial-gradient(900px 600px at 90% 30%, rgba(255,138,42,.18), transparent 60%),
+        linear-gradient(135deg, rgba(10,10,12,.9), rgba(0,0,0,.9));
+      position:relative;
+    }
+    .cover::before{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, rgba(255,106,0,.09), transparent 40%, rgba(255,106,0,.06));
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .cover-inner{
+      padding:34px 26px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:22px;
+      align-items:end;
+    }
+    .title{
+      font-size:44px;
+      margin:0 0 10px;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size:16px;
+      line-height:1.5;
+      max-width: 60ch;
+    }
+    .badge-row{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap}
+    .badge{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      color: #f7f7fb;
+      font-size:12px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .badge i{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,106,0,.15);
+    }
+    .cover-right{
+      display:flex; flex-direction:column; gap:12px;
+      align-items:flex-end;
+    }
+    .search{
+      width:100%;
+      max-width: 420px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,12,.55);
+      color: var(--text);
+      padding:12px 14px;
+      outline:none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .search:focus{ border-color: rgba(255,106,0,.7); box-shadow: 0 0 0 4px rgba(255,106,0,.14); }
+    .hint{color:var(--muted); font-size:12px; text-align:right}
+    section{ margin-top:26px; }
+    .section-head{
+      display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+      padding:12px 4px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:14px;
+    }
+    .card{
+      opacity:1; transform:none;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(600px 250px at 30% 0%, rgba(255,106,0,.10), transparent 55%),
+        linear-gradient(180deg, rgba(18,18,22,.95), rgba(12,12,14,.95));
+      box-shadow: 0 10px 22px rgba(0,0,0,.45);
+      overflow:hidden;
+      transform: translateZ(0);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      position:relative;
+      opacity:0; transform: translateY(8px);
+      animation: fadeIn .55s ease forwards;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,106,0,.5);
+      box-shadow: 0 14px 30px rgba(0,0,0,.6);
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background: linear-gradient(135deg, rgba(255,106,0,.22), transparent 45%, rgba(255,106,0,.08));
+      opacity:0;
+      transition: opacity .18s ease;
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .card:hover::after{opacity:1}
+    .card-top{
+      padding:16px 16px 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .card h3{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.2px;
+      line-height:1.3;
+    }
+    .tag{
+      flex:0 0 auto;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,106,0,.10);
+      border:1px solid rgba(255,106,0,.22);
+      font-size:11px;
+      color:#ffd6b8;
+      white-space:nowrap;
+    }
+    .card-body{
+      padding:0 16px 14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+    }
+    .macro-row{
+      display:flex; flex-wrap:wrap; gap:8px;
+      padding:0 16px 14px;
+    }
+    .chip{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.28);
+      color:#f3f3f5;
+    }
+    details{
+      border-top:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.18));
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:12px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{
+      width:22px; height:22px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      display:grid; place-items:center;
+      background: rgba(0,0,0,.25);
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    details[open] .chev{ transform: rotate(180deg); border-color: rgba(255,106,0,.5); }
+    .details-inner{ padding:0 16px 16px; color:var(--text);}
+    .details-inner h4{
+      margin:12px 0 6px;
+      font-size:12px;
+      letter-spacing:.3px;
+      color:#ffd6b8;
+      text-transform: uppercase;
+    }
+    ul{margin:8px 0 0; padding-left:18px; color:var(--muted)}
+    ol{margin:8px 0 0; padding-left:18px; color:var(--muted)}
+    .footer{
+      margin-top:32px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .fade-in{
+      opacity:0; transform: translateY(8px);
+      animation: fadeIn .55s ease forwards;
+    }
+    @keyframes fadeIn{
+      to{opacity:1; transform: translateY(0)}
+    }
+    @media (max-width: 980px){
+      .cover-inner{ grid-template-columns: 1fr; align-items:start;}
+      .cover-right{ align-items:stretch;}
+      .hint{text-align:left}
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .brand{min-width:auto}
+    }
+    @media (max-width: 620px){
+      .title{ font-size:34px;}
+      .grid{ grid-template-columns: 1fr; }
+      .btn{ padding:10px 10px;}
+      .topbar-inner{ gap:10px; }
+    }
+  
+    .search-results{
+      position:absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      right: 0;
+      z-index: 60;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(12,12,14,.92);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.65);
+      overflow:hidden;
+      max-height: 360px;
+      overflow-y:auto;
+    }
+    .sr-item{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      cursor:pointer;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      transition: background .14s ease, transform .14s ease;
+    }
+    .sr-item:last-child{border-bottom:none}
+    .sr-item:hover{ background: rgba(255,106,0,.10); transform: translateY(-1px);}
+    .sr-left{display:flex; flex-direction:column; gap:2px; min-width:0}
+    .sr-name{font-size:13px; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .sr-meta{font-size:11px; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .sr-pill{
+      flex:0 0 auto;
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,106,0,.12);
+      border:1px solid rgba(255,106,0,.25);
+      color:#ffd6b8;
+    }
+    .sr-empty{
+      padding: 12px 12px;
+      color: var(--muted);
+      font-size:12px;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" role="banner" aria-label="Déjouer les fringales">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Déjouer les fringales</h1>
+          <div class="sub">Coach Will – Reboot 90</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navigation des sections">
+        <a class="btn" href="#cover"><span>Couverture</span></a>
+        <a class="btn" href="#bloc-a"><span>Bloc A</span><span class="pill" id="pill-a">7</span></a>
+        <a class="btn" href="#bloc-b"><span>Bloc B</span><span class="pill" id="pill-b">19</span></a>
+        <a class="btn" href="#bloc-c"><span>Bloc C</span><span class="pill" id="pill-c">9</span></a>
+        <a class="btn" href="#bloc-d"><span>Bloc D</span><span class="pill" id="pill-d">10</span></a>
+        <a class="btn" href="#bloc-e"><span>Bloc E</span><span class="pill" id="pill-e">9</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="cover fade-in" id="cover" aria-label="Couverture">
+      <div class="cover-inner">
+        <div>
+          <h2 class="title">Déjouer les fringales</h2>
+          <p class="subtitle">
+            Livre de recettes <strong>protéinées</strong> (petits-déjeuners, repas, collations, desserts et bonus).
+            Un format <strong>interactif</strong> : navigation rapide, cartes avec détails, recherche par nom/ingrédients.
+          </p>
+
+          </div>
+
+        <div class="cover-right">
+          <div style="position:relative; width:100%; max-width:420px;">
+  <input class="search" id="search" type="search" placeholder="Rechercher une recette (ex : whey, poulet, avoine…)" aria-label="Rechercher une recette" autocomplete="off" />
+  <div id="searchResults" class="search-results" role="listbox" aria-label="Résultats de recherche" hidden></div>
+</div>
+          <div class="hint">Astuce : clique sur “Détails” pour ingrédients + préparation.</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="content">
+<section id="bloc-a" class="fade-in">
+  <div class="section-head">
+    <div>
+      <h2>Bloc A — Petits-déjeuners protéinés</h2>
+      <p>7 recettes</p>
+    </div>
+  </div>
+  <div class="grid">
+<article class="card recipe-card" id="recipe-smoothie bowl whey 200 g yogourt grec 0 % 1 banane 25 g whey 50 g fruits rouges mixer tous les ingrédients. verser dans un bol. ajouter toppings (facultatif). 300 kcal • 28 g protéines • 35 g glucides • 4 g lipides" data-hay="smoothie bowl whey 200 g yogourt grec 0 % 1 banane 25 g whey 50 g fruits rouges mixer tous les ingrédients. verser dans un bol. ajouter toppings (facultatif). 300 kcal • 28 g protéines • 35 g glucides • 4 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Smoothie Bowl Whey</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">300 kcal • 28 g protéines • 35 g glucides • 4 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">300 kcal</span><span class="chip">28 g prot</span><span class="chip">35 g gluc</span><span class="chip">4 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g yogourt grec 0 %</li><li>1 banane</li><li>25 g whey</li><li>50 g fruits rouges</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mixer tous les ingrédients.</li><li>Verser dans un bol.</li><li>Ajouter toppings (facultatif).</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-omelette protéinée au poulet 3 blancs d’œufs 1 œuf entier 50 g poulet cuit épices battre les œufs. ajouter le poulet. cuire à la poêle 3 min par côté. 220 kcal • 30 g protéines • 3 g glucides • 9 g lipides" data-hay="omelette protéinée au poulet 3 blancs d’œufs 1 œuf entier 50 g poulet cuit épices battre les œufs. ajouter le poulet. cuire à la poêle 3 min par côté. 220 kcal • 30 g protéines • 3 g glucides • 9 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Omelette protéinée au poulet</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">220 kcal • 30 g protéines • 3 g glucides • 9 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">30 g prot</span><span class="chip">3 g gluc</span><span class="chip">9 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>3 blancs d’œufs</li><li>1 œuf entier</li><li>50 g poulet cuit</li><li>Épices</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Battre les œufs.</li><li>Ajouter le poulet.</li><li>Cuire à la poêle 3 min par côté.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-porridge protéiné 40 g flocons d’avoine 200 ml lait d’amande 20 g whey vanille graines de chia chauffer le lait. ajouter l’avoine. incorporer whey et chia. 320 kcal • 25 g protéines • 38 g glucides • 7 g lipides" data-hay="porridge protéiné 40 g flocons d’avoine 200 ml lait d’amande 20 g whey vanille graines de chia chauffer le lait. ajouter l’avoine. incorporer whey et chia. 320 kcal • 25 g protéines • 38 g glucides • 7 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Porridge protéiné</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">320 kcal • 25 g protéines • 38 g glucides • 7 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">320 kcal</span><span class="chip">25 g prot</span><span class="chip">38 g gluc</span><span class="chip">7 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>40 g flocons d’avoine</li><li>200 ml lait d’amande</li><li>20 g whey vanille</li><li>Graines de chia</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Chauffer le lait.</li><li>Ajouter l’avoine.</li><li>Incorporer whey et chia.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-toast avocat–œufs 2 tranches pain complet 1 avocat 2 œufs sel, poivre griller le pain. écraser l’avocat. cuire les œufs. assembler. 400 kcal • 22 g protéines • 34 g glucides • 18 g lipides" data-hay="toast avocat–œufs 2 tranches pain complet 1 avocat 2 œufs sel, poivre griller le pain. écraser l’avocat. cuire les œufs. assembler. 400 kcal • 22 g protéines • 34 g glucides • 18 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Toast avocat–œufs</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">400 kcal • 22 g protéines • 34 g glucides • 18 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">400 kcal</span><span class="chip">22 g prot</span><span class="chip">34 g gluc</span><span class="chip">18 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>2 tranches pain complet</li><li>1 avocat</li><li>2 œufs</li><li>Sel, poivre</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Griller le pain.</li><li>Écraser l’avocat.</li><li>Cuire les œufs.</li><li>Assembler.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-skyr bowl 200 g skyr 1 pomme amandes cannelle assembler tous les ingrédients dans un bol. 280 kcal • 25 g protéines • 22 g glucides • 8 g lipides" data-hay="skyr bowl 200 g skyr 1 pomme amandes cannelle assembler tous les ingrédients dans un bol. 280 kcal • 25 g protéines • 22 g glucides • 8 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Skyr Bowl</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">280 kcal • 25 g protéines • 22 g glucides • 8 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">280 kcal</span><span class="chip">25 g prot</span><span class="chip">22 g gluc</span><span class="chip">8 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g skyr</li><li>1 pomme</li><li>Amandes</li><li>Cannelle</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler tous les ingrédients dans un bol.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-crêpes protéinées 50 g farine d’avoine 30 g whey 1 œuf 100 ml lait d’amande mélanger les ingrédients. cuire en crêpes. 310 kcal • 27 g protéines • 34 g glucides • 7 g lipides" data-hay="crêpes protéinées 50 g farine d’avoine 30 g whey 1 œuf 100 ml lait d’amande mélanger les ingrédients. cuire en crêpes. 310 kcal • 27 g protéines • 34 g glucides • 7 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Crêpes protéinées</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">310 kcal • 27 g protéines • 34 g glucides • 7 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">310 kcal</span><span class="chip">27 g prot</span><span class="chip">34 g gluc</span><span class="chip">7 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>50 g farine d’avoine</li><li>30 g whey</li><li>1 œuf</li><li>100 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger les ingrédients.</li><li>Cuire en crêpes.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-granola maison protéiné 50 g flocons d’avoine 20 g whey 10 g miel 10 g noix mélanger. cuire 10 min à 180 °c. laisser refroidir. 350 kcal • 22 g protéines • 36 g glucides • 12 g lipides" data-hay="granola maison protéiné 50 g flocons d’avoine 20 g whey 10 g miel 10 g noix mélanger. cuire 10 min à 180 °c. laisser refroidir. 350 kcal • 22 g protéines • 36 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Granola maison protéiné</h3>
+    <span class="tag">BLOC-A</span>
+  </div>
+  <div class="card-body">350 kcal • 22 g protéines • 36 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">350 kcal</span><span class="chip">22 g prot</span><span class="chip">36 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>50 g flocons d’avoine</li><li>20 g whey</li><li>10 g miel</li><li>10 g noix</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 10 min à 180 °C.</li><li>Laisser refroidir.</li></ol>
+    </div>
+  </details>
+</article>
+</div>
+</section>
+
+
+<section id="bloc-b" class="fade-in">
+  <div class="section-head">
+    <div>
+      <h2>Bloc B — Repas principaux</h2>
+      <p>19 recettes</p>
+    </div>
+  </div>
+  <div class="grid">
+<article class="card recipe-card" id="recipe-bowl poulet–riz 100 g riz basmati (cru) 150 g poulet 100 g brocolis 1 c. à café huile d’olive cuire le riz. griller le poulet. cuire brocolis. assembler. 500 kcal • 42 g protéines • 50 g glucides • 14 g lipides" data-hay="bowl poulet–riz 100 g riz basmati (cru) 150 g poulet 100 g brocolis 1 c. à café huile d’olive cuire le riz. griller le poulet. cuire brocolis. assembler. 500 kcal • 42 g protéines • 50 g glucides • 14 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Bowl poulet–riz</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">500 kcal • 42 g protéines • 50 g glucides • 14 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">500 kcal</span><span class="chip">42 g prot</span><span class="chip">50 g gluc</span><span class="chip">14 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>100 g riz basmati (cru)</li><li>150 g poulet</li><li>100 g brocolis</li><li>1 c. à café huile d’olive</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire le riz.</li><li>Griller le poulet.</li><li>Cuire brocolis.</li><li>Assembler.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-chili con carne protéiné 150 g bœuf 5 % haricots rouges tomates concassées épices chili cuire le bœuf. ajouter tomates et haricots. mijoter 20 min. 420 kcal • 36 g protéines • 28 g glucides • 12 g lipides" data-hay="chili con carne protéiné 150 g bœuf 5 % haricots rouges tomates concassées épices chili cuire le bœuf. ajouter tomates et haricots. mijoter 20 min. 420 kcal • 36 g protéines • 28 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Chili con carne protéiné</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">420 kcal • 36 g protéines • 28 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">420 kcal</span><span class="chip">36 g prot</span><span class="chip">28 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g bœuf 5 %</li><li>Haricots rouges</li><li>Tomates concassées</li><li>Épices chili</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire le bœuf.</li><li>Ajouter tomates et haricots.</li><li>Mijoter 20 min.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-poulet grillé sauce yogourt 150 g poulet 100 g yogourt 0 % ail citron griller le poulet. mélanger yogourt, ail, citron. servir. 310 kcal • 42 g protéines • 6 g glucides • 8 g lipides" data-hay="poulet grillé sauce yogourt 150 g poulet 100 g yogourt 0 % ail citron griller le poulet. mélanger yogourt, ail, citron. servir. 310 kcal • 42 g protéines • 6 g glucides • 8 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Poulet grillé sauce yogourt</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">310 kcal • 42 g protéines • 6 g glucides • 8 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">310 kcal</span><span class="chip">42 g prot</span><span class="chip">6 g gluc</span><span class="chip">8 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g poulet</li><li>100 g yogourt 0 %</li><li>Ail</li><li>Citron</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Griller le poulet.</li><li>Mélanger yogourt, ail, citron.</li><li>Servir.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-saumon au four 150 g saumon asperges huile d’olive citron cuire au four 15 min à 180 °c. 400 kcal • 36 g protéines • 6 g glucides • 20 g lipides" data-hay="saumon au four 150 g saumon asperges huile d’olive citron cuire au four 15 min à 180 °c. 400 kcal • 36 g protéines • 6 g glucides • 20 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Saumon au four</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">400 kcal • 36 g protéines • 6 g glucides • 20 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">400 kcal</span><span class="chip">36 g prot</span><span class="chip">6 g gluc</span><span class="chip">20 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g saumon</li><li>Asperges</li><li>Huile d’olive</li><li>Citron</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire au four 15 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-curry de pois chiches pois chiches tomates oignon épices curry cuire l’oignon. ajouter pois chiches et tomates. cuire 15 min. 350 kcal • 18 g protéines • 40 g glucides • 10 g lipides" data-hay="curry de pois chiches pois chiches tomates oignon épices curry cuire l’oignon. ajouter pois chiches et tomates. cuire 15 min. 350 kcal • 18 g protéines • 40 g glucides • 10 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Curry de pois chiches</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">350 kcal • 18 g protéines • 40 g glucides • 10 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">350 kcal</span><span class="chip">18 g prot</span><span class="chip">40 g gluc</span><span class="chip">10 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Pois chiches</li><li>Tomates</li><li>Oignon</li><li>Épices curry</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire l’oignon.</li><li>Ajouter pois chiches et tomates.</li><li>Cuire 15 min.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-pâtes complètes au thon 100 g pâtes complètes 120 g thon courgettes cuire pâtes. ajouter thon et courgettes. 450 kcal • 35 g protéines • 55 g glucides • 9 g lipides" data-hay="pâtes complètes au thon 100 g pâtes complètes 120 g thon courgettes cuire pâtes. ajouter thon et courgettes. 450 kcal • 35 g protéines • 55 g glucides • 9 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Pâtes complètes au thon</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">450 kcal • 35 g protéines • 55 g glucides • 9 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">450 kcal</span><span class="chip">35 g prot</span><span class="chip">55 g gluc</span><span class="chip">9 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>100 g pâtes complètes</li><li>120 g thon</li><li>Courgettes</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire pâtes.</li><li>Ajouter thon et courgettes.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-bœuf sauté aux légumes 150 g bœuf poivrons carottes sauce soja saisir le bœuf. ajouter légumes. cuire 10 min. 420 kcal • 40 g protéines • 20 g glucides • 15 g lipides" data-hay="bœuf sauté aux légumes 150 g bœuf poivrons carottes sauce soja saisir le bœuf. ajouter légumes. cuire 10 min. 420 kcal • 40 g protéines • 20 g glucides • 15 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Bœuf sauté aux légumes</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">420 kcal • 40 g protéines • 20 g glucides • 15 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">420 kcal</span><span class="chip">40 g prot</span><span class="chip">20 g gluc</span><span class="chip">15 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g bœuf</li><li>Poivrons</li><li>Carottes</li><li>Sauce soja</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Saisir le bœuf.</li><li>Ajouter légumes.</li><li>Cuire 10 min.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-dinde grillée &amp; quinoa 150 g dinde 100 g quinoa courgettes huile cuire quinoa. griller dinde et courgettes. assembler. 480 kcal • 44 g protéines • 45 g glucides • 14 g lipides" data-hay="dinde grillée &amp; quinoa 150 g dinde 100 g quinoa courgettes huile cuire quinoa. griller dinde et courgettes. assembler. 480 kcal • 44 g protéines • 45 g glucides • 14 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Dinde grillée &amp; quinoa</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">480 kcal • 44 g protéines • 45 g glucides • 14 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">480 kcal</span><span class="chip">44 g prot</span><span class="chip">45 g gluc</span><span class="chip">14 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g dinde</li><li>100 g quinoa</li><li>Courgettes</li><li>Huile</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire quinoa.</li><li>Griller dinde et courgettes.</li><li>Assembler.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-tacos protéinés 2 tortillas complètes 100 g poulet haricots noirs tomates cuire poulet. garnir tortillas. 420 kcal • 34 g protéines • 42 g glucides • 12 g lipides" data-hay="tacos protéinés 2 tortillas complètes 100 g poulet haricots noirs tomates cuire poulet. garnir tortillas. 420 kcal • 34 g protéines • 42 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Tacos protéinés</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">420 kcal • 34 g protéines • 42 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">420 kcal</span><span class="chip">34 g prot</span><span class="chip">42 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>2 tortillas complètes</li><li>100 g poulet</li><li>Haricots noirs</li><li>Tomates</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire poulet.</li><li>Garnir tortillas.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-lasagnes light lasagnes complètes 150 g bœuf tomates épices italiennes monter les couches. cuire 30 min à 180 °c. 480 kcal • 38 g protéines • 40 g glucides • 15 g lipides" data-hay="lasagnes light lasagnes complètes 150 g bœuf tomates épices italiennes monter les couches. cuire 30 min à 180 °c. 480 kcal • 38 g protéines • 40 g glucides • 15 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Lasagnes light</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">480 kcal • 38 g protéines • 40 g glucides • 15 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">480 kcal</span><span class="chip">38 g prot</span><span class="chip">40 g gluc</span><span class="chip">15 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Lasagnes complètes</li><li>150 g bœuf</li><li>Tomates</li><li>Épices italiennes</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Monter les couches.</li><li>Cuire 30 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-wrap thon &amp; cottage wrap complet 80 g thon 50 g cottage cheese crudités assembler le wrap. 300 kcal • 28 g protéines • 30 g glucides • 8 g lipides" data-hay="wrap thon &amp; cottage wrap complet 80 g thon 50 g cottage cheese crudités assembler le wrap. 300 kcal • 28 g protéines • 30 g glucides • 8 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Wrap thon &amp; cottage</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">300 kcal • 28 g protéines • 30 g glucides • 8 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">300 kcal</span><span class="chip">28 g prot</span><span class="chip">30 g gluc</span><span class="chip">8 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Wrap complet</li><li>80 g thon</li><li>50 g cottage cheese</li><li>Crudités</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler le wrap.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-riz sauté au tofu riz cuit 100 g tofu légumes sauce soja dorer tofu. ajouter légumes et riz. 400 kcal • 25 g protéines • 50 g glucides • 12 g lipides" data-hay="riz sauté au tofu riz cuit 100 g tofu légumes sauce soja dorer tofu. ajouter légumes et riz. 400 kcal • 25 g protéines • 50 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Riz sauté au tofu</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">400 kcal • 25 g protéines • 50 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">400 kcal</span><span class="chip">25 g prot</span><span class="chip">50 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Riz cuit</li><li>100 g tofu</li><li>Légumes</li><li>Sauce soja</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Dorer tofu.</li><li>Ajouter légumes et riz.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-burger protéiné maison pain complet 100 g steak 5 % fromage light salade cuire steak. assembler burger. 450 kcal • 38 g protéines • 36 g glucides • 15 g lipides" data-hay="burger protéiné maison pain complet 100 g steak 5 % fromage light salade cuire steak. assembler burger. 450 kcal • 38 g protéines • 36 g glucides • 15 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Burger protéiné maison</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">450 kcal • 38 g protéines • 36 g glucides • 15 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">450 kcal</span><span class="chip">38 g prot</span><span class="chip">36 g gluc</span><span class="chip">15 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Pain complet</li><li>100 g steak 5 %</li><li>Fromage light</li><li>Salade</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire steak.</li><li>Assembler burger.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-salade césar light poulet grillé salade romaine parmesan sauce légère assembler tous les ingrédients. 300 kcal • 30 g protéines • 12 g glucides • 10 g lipides" data-hay="salade césar light poulet grillé salade romaine parmesan sauce légère assembler tous les ingrédients. 300 kcal • 30 g protéines • 12 g glucides • 10 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Salade César light</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">300 kcal • 30 g protéines • 12 g glucides • 10 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">300 kcal</span><span class="chip">30 g prot</span><span class="chip">12 g gluc</span><span class="chip">10 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Poulet grillé</li><li>Salade romaine</li><li>Parmesan</li><li>Sauce légère</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler tous les ingrédients.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-filet de colin au four 150 g colin courgettes huile citron cuire 15 min à 180 °c. 350 kcal • 34 g protéines • 5 g glucides • 16 g lipides" data-hay="filet de colin au four 150 g colin courgettes huile citron cuire 15 min à 180 °c. 350 kcal • 34 g protéines • 5 g glucides • 16 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Filet de colin au four</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">350 kcal • 34 g protéines • 5 g glucides • 16 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">350 kcal</span><span class="chip">34 g prot</span><span class="chip">5 g gluc</span><span class="chip">16 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g colin</li><li>Courgettes</li><li>Huile</li><li>Citron</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire 15 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-chili de dinde 150 g dinde haricots rouges tomates épices cuire la dinde. ajouter le reste. mijoter. 380 kcal • 34 g protéines • 28 g glucides • 10 g lipides" data-hay="chili de dinde 150 g dinde haricots rouges tomates épices cuire la dinde. ajouter le reste. mijoter. 380 kcal • 34 g protéines • 28 g glucides • 10 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Chili de dinde</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">380 kcal • 34 g protéines • 28 g glucides • 10 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">380 kcal</span><span class="chip">34 g prot</span><span class="chip">28 g gluc</span><span class="chip">10 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g dinde</li><li>Haricots rouges</li><li>Tomates</li><li>Épices</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire la dinde.</li><li>Ajouter le reste.</li><li>Mijoter.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-salade de pois chiches pois chiches tomates cerises persil citron mélanger et assaisonner. 250 kcal • 12 g protéines • 30 g glucides • 6 g lipides" data-hay="salade de pois chiches pois chiches tomates cerises persil citron mélanger et assaisonner. 250 kcal • 12 g protéines • 30 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Salade de pois chiches</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">250 kcal • 12 g protéines • 30 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">250 kcal</span><span class="chip">12 g prot</span><span class="chip">30 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>Pois chiches</li><li>Tomates cerises</li><li>Persil</li><li>Citron</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger et assaisonner.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-saumon &amp; quinoa 150 g saumon 100 g quinoa épinards huile cuire quinoa. griller saumon. assembler. 460 kcal • 40 g protéines • 42 g glucides • 14 g lipides" data-hay="saumon &amp; quinoa 150 g saumon 100 g quinoa épinards huile cuire quinoa. griller saumon. assembler. 460 kcal • 40 g protéines • 42 g glucides • 14 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Saumon &amp; quinoa</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">460 kcal • 40 g protéines • 42 g glucides • 14 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">460 kcal</span><span class="chip">40 g prot</span><span class="chip">42 g gluc</span><span class="chip">14 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g saumon</li><li>100 g quinoa</li><li>Épinards</li><li>Huile</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire quinoa.</li><li>Griller saumon.</li><li>Assembler.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-poulet curry coco 200 g poulet lait de coco léger carottes curry cuire poulet. ajouter légumes et coco. mijoter. 500 kcal • 42 g protéines • 28 g glucides • 20 g lipides" data-hay="poulet curry coco 200 g poulet lait de coco léger carottes curry cuire poulet. ajouter légumes et coco. mijoter. 500 kcal • 42 g protéines • 28 g glucides • 20 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Poulet curry coco</h3>
+    <span class="tag">BLOC-B</span>
+  </div>
+  <div class="card-body">500 kcal • 42 g protéines • 28 g glucides • 20 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">500 kcal</span><span class="chip">42 g prot</span><span class="chip">28 g gluc</span><span class="chip">20 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g poulet</li><li>Lait de coco léger</li><li>Carottes</li><li>Curry</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire poulet.</li><li>Ajouter légumes et coco.</li><li>Mijoter.</li></ol>
+    </div>
+  </details>
+</article>
+</div>
+</section>
+
+
+<section id="bloc-c" class="fade-in">
+  <div class="section-head">
+    <div>
+      <h2>Bloc C — Collations &amp; snacks protéinés</h2>
+      <p>9 recettes</p>
+    </div>
+  </div>
+  <div class="grid">
+<article class="card recipe-card" id="recipe-barres protéinées maison 60 g flocons d’avoine 30 g whey 20 g beurre d’arachide 20 g miel mélanger. presser dans un moule. réfrigérer 1 h. 200 kcal • 15 g protéines • 22 g glucides • 6 g lipides" data-hay="barres protéinées maison 60 g flocons d’avoine 30 g whey 20 g beurre d’arachide 20 g miel mélanger. presser dans un moule. réfrigérer 1 h. 200 kcal • 15 g protéines • 22 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Barres protéinées maison</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">200 kcal • 15 g protéines • 22 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">200 kcal</span><span class="chip">15 g prot</span><span class="chip">22 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>60 g flocons d’avoine</li><li>30 g whey</li><li>20 g beurre d’arachide</li><li>20 g miel</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Presser dans un moule.</li><li>Réfrigérer 1 h.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-energy balls protéinées 40 g flocons d’avoine 20 g whey 20 g beurre d’arachide eau mélanger. former des boules. réfrigérer 30 min. 180 kcal • 14 g protéines • 16 g glucides • 7 g lipides" data-hay="energy balls protéinées 40 g flocons d’avoine 20 g whey 20 g beurre d’arachide eau mélanger. former des boules. réfrigérer 30 min. 180 kcal • 14 g protéines • 16 g glucides • 7 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Energy balls protéinées</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">180 kcal • 14 g protéines • 16 g glucides • 7 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">180 kcal</span><span class="chip">14 g prot</span><span class="chip">16 g gluc</span><span class="chip">7 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>40 g flocons d’avoine</li><li>20 g whey</li><li>20 g beurre d’arachide</li><li>Eau</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Former des boules.</li><li>Réfrigérer 30 min.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-yogourt protéiné aux fruits rouges 200 g yogourt grec 0 % 50 g fruits rouges 10 g miel mélanger le yogourt et le miel. ajouter les fruits. 220 kcal • 20 g protéines • 24 g glucides • 2 g lipides" data-hay="yogourt protéiné aux fruits rouges 200 g yogourt grec 0 % 50 g fruits rouges 10 g miel mélanger le yogourt et le miel. ajouter les fruits. 220 kcal • 20 g protéines • 24 g glucides • 2 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Yogourt protéiné aux fruits rouges</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">220 kcal • 20 g protéines • 24 g glucides • 2 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">20 g prot</span><span class="chip">24 g gluc</span><span class="chip">2 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g yogourt grec 0 %</li><li>50 g fruits rouges</li><li>10 g miel</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger le yogourt et le miel.</li><li>Ajouter les fruits.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-shake protéiné banane–cacahuète 1 banane 25 g whey 10 g beurre d’arachide 250 ml lait d’amande mixer tous les ingrédients. 300 kcal • 25 g protéines • 28 g glucides • 9 g lipides" data-hay="shake protéiné banane–cacahuète 1 banane 25 g whey 10 g beurre d’arachide 250 ml lait d’amande mixer tous les ingrédients. 300 kcal • 25 g protéines • 28 g glucides • 9 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Shake protéiné banane–cacahuète</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">300 kcal • 25 g protéines • 28 g glucides • 9 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">300 kcal</span><span class="chip">25 g prot</span><span class="chip">28 g gluc</span><span class="chip">9 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>1 banane</li><li>25 g whey</li><li>10 g beurre d’arachide</li><li>250 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mixer tous les ingrédients.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-houmous protéiné &amp; crudités 150 g pois chiches yogourt 0 % citron ail mixer tous les ingrédients. servir avec crudités. 250 kcal • 12 g protéines • 28 g glucides • 6 g lipides" data-hay="houmous protéiné &amp; crudités 150 g pois chiches yogourt 0 % citron ail mixer tous les ingrédients. servir avec crudités. 250 kcal • 12 g protéines • 28 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Houmous protéiné &amp; crudités</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">250 kcal • 12 g protéines • 28 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">250 kcal</span><span class="chip">12 g prot</span><span class="chip">28 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g pois chiches</li><li>Yogourt 0 %</li><li>Citron</li><li>Ail</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mixer tous les ingrédients.</li><li>Servir avec crudités.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-cookies protéinés 40 g farine d’avoine 30 g whey 1 œuf pépites chocolat mélanger. former cookies. cuire 12 min à 180 °c. 180 kcal • 14 g protéines • 18 g glucides • 6 g lipides" data-hay="cookies protéinés 40 g farine d’avoine 30 g whey 1 œuf pépites chocolat mélanger. former cookies. cuire 12 min à 180 °c. 180 kcal • 14 g protéines • 18 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Cookies protéinés</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">180 kcal • 14 g protéines • 18 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">180 kcal</span><span class="chip">14 g prot</span><span class="chip">18 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>40 g farine d’avoine</li><li>30 g whey</li><li>1 œuf</li><li>Pépites chocolat</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Former cookies.</li><li>Cuire 12 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-fromage blanc &amp; granola 200 g fromage blanc 0 % 30 g granola maison assembler dans un bol. 260 kcal • 22 g protéines • 28 g glucides • 6 g lipides" data-hay="fromage blanc &amp; granola 200 g fromage blanc 0 % 30 g granola maison assembler dans un bol. 260 kcal • 22 g protéines • 28 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Fromage blanc &amp; granola</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">260 kcal • 22 g protéines • 28 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">260 kcal</span><span class="chip">22 g prot</span><span class="chip">28 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g fromage blanc 0 %</li><li>30 g granola maison</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler dans un bol.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-crackers protéinés 50 g farine complète 20 g whey eau sel former pâte. étaler. cuire 15 min à 180 °c. 220 kcal • 15 g protéines • 30 g glucides • 4 g lipides" data-hay="crackers protéinés 50 g farine complète 20 g whey eau sel former pâte. étaler. cuire 15 min à 180 °c. 220 kcal • 15 g protéines • 30 g glucides • 4 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Crackers protéinés</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">220 kcal • 15 g protéines • 30 g glucides • 4 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">15 g prot</span><span class="chip">30 g gluc</span><span class="chip">4 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>50 g farine complète</li><li>20 g whey</li><li>Eau</li><li>Sel</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Former pâte.</li><li>Étaler.</li><li>Cuire 15 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-mini sandwich dinde–avocat 2 tranches pain complet 80 g dinde ½ avocat assembler le sandwich. 320 kcal • 26 g protéines • 28 g glucides • 10 g lipides" data-hay="mini sandwich dinde–avocat 2 tranches pain complet 80 g dinde ½ avocat assembler le sandwich. 320 kcal • 26 g protéines • 28 g glucides • 10 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Mini sandwich dinde–avocat</h3>
+    <span class="tag">BLOC-C</span>
+  </div>
+  <div class="card-body">320 kcal • 26 g protéines • 28 g glucides • 10 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">320 kcal</span><span class="chip">26 g prot</span><span class="chip">28 g gluc</span><span class="chip">10 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>2 tranches pain complet</li><li>80 g dinde</li><li>½ avocat</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler le sandwich.</li></ol>
+    </div>
+  </details>
+</article>
+</div>
+</section>
+
+
+<section id="bloc-d" class="fade-in">
+  <div class="section-head">
+    <div>
+      <h2>Bloc D — Desserts protéinés</h2>
+      <p>10 recettes</p>
+    </div>
+  </div>
+  <div class="grid">
+<article class="card recipe-card" id="recipe-glace protéinée express 1 banane congelée 25 g whey vanille 50 ml lait d’amande mixer tous les ingrédients. servir immédiatement. 220 kcal • 20 g protéines • 26 g glucides • 3 g lipides" data-hay="glace protéinée express 1 banane congelée 25 g whey vanille 50 ml lait d’amande mixer tous les ingrédients. servir immédiatement. 220 kcal • 20 g protéines • 26 g glucides • 3 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Glace protéinée express</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">220 kcal • 20 g protéines • 26 g glucides • 3 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">20 g prot</span><span class="chip">26 g gluc</span><span class="chip">3 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>1 banane congelée</li><li>25 g whey vanille</li><li>50 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mixer tous les ingrédients.</li><li>Servir immédiatement.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-mug cake protéiné chocolat 30 g farine d’avoine 25 g whey chocolat 1 œuf 50 ml lait d’amande mélanger. cuire 60–90 s au micro-ondes. 280 kcal • 22 g protéines • 26 g glucides • 7 g lipides" data-hay="mug cake protéiné chocolat 30 g farine d’avoine 25 g whey chocolat 1 œuf 50 ml lait d’amande mélanger. cuire 60–90 s au micro-ondes. 280 kcal • 22 g protéines • 26 g glucides • 7 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Mug cake protéiné chocolat</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">280 kcal • 22 g protéines • 26 g glucides • 7 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">280 kcal</span><span class="chip">22 g prot</span><span class="chip">26 g gluc</span><span class="chip">7 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>30 g farine d’avoine</li><li>25 g whey chocolat</li><li>1 œuf</li><li>50 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 60–90 s au micro-ondes.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-brownie protéiné 40 g farine d’avoine 30 g whey chocolat 1 œuf 10 g cacao mélanger. cuire 15 min à 180 °c. 260 kcal • 24 g protéines • 22 g glucides • 6 g lipides" data-hay="brownie protéiné 40 g farine d’avoine 30 g whey chocolat 1 œuf 10 g cacao mélanger. cuire 15 min à 180 °c. 260 kcal • 24 g protéines • 22 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Brownie protéiné</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">260 kcal • 24 g protéines • 22 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">260 kcal</span><span class="chip">24 g prot</span><span class="chip">22 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>40 g farine d’avoine</li><li>30 g whey chocolat</li><li>1 œuf</li><li>10 g cacao</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 15 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-cheesecake protéiné 200 g fromage frais light 30 g whey vanille 1 œuf édulcorant mélanger. cuire 25 min à 180 °c. 300 kcal • 28 g protéines • 10 g glucides • 8 g lipides" data-hay="cheesecake protéiné 200 g fromage frais light 30 g whey vanille 1 œuf édulcorant mélanger. cuire 25 min à 180 °c. 300 kcal • 28 g protéines • 10 g glucides • 8 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Cheesecake protéiné</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">300 kcal • 28 g protéines • 10 g glucides • 8 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">300 kcal</span><span class="chip">28 g prot</span><span class="chip">10 g gluc</span><span class="chip">8 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g fromage frais light</li><li>30 g whey vanille</li><li>1 œuf</li><li>Édulcorant</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 25 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-crêpes dessert protéinées 50 g farine d’avoine 30 g whey 1 œuf 100 ml lait d’amande mélanger. cuire à la poêle. 310 kcal • 27 g protéines • 34 g glucides • 7 g lipides" data-hay="crêpes dessert protéinées 50 g farine d’avoine 30 g whey 1 œuf 100 ml lait d’amande mélanger. cuire à la poêle. 310 kcal • 27 g protéines • 34 g glucides • 7 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Crêpes dessert protéinées</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">310 kcal • 27 g protéines • 34 g glucides • 7 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">310 kcal</span><span class="chip">27 g prot</span><span class="chip">34 g gluc</span><span class="chip">7 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>50 g farine d’avoine</li><li>30 g whey</li><li>1 œuf</li><li>100 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire à la poêle.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-tiramisu protéiné 200 g yogourt grec 0 % 30 g whey vanille café cacao monter les couches. réfrigérer. 280 kcal • 25 g protéines • 18 g glucides • 4 g lipides" data-hay="tiramisu protéiné 200 g yogourt grec 0 % 30 g whey vanille café cacao monter les couches. réfrigérer. 280 kcal • 25 g protéines • 18 g glucides • 4 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Tiramisu protéiné</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">280 kcal • 25 g protéines • 18 g glucides • 4 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">280 kcal</span><span class="chip">25 g prot</span><span class="chip">18 g gluc</span><span class="chip">4 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g yogourt grec 0 %</li><li>30 g whey vanille</li><li>Café</li><li>Cacao</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Monter les couches.</li><li>Réfrigérer.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-cookies protéinés chocolat-banane 1 banane 30 g whey chocolat 40 g farine d’avoine former cookies. cuire 12 min à 180 °c. 240 kcal • 20 g protéines • 28 g glucides • 5 g lipides" data-hay="cookies protéinés chocolat-banane 1 banane 30 g whey chocolat 40 g farine d’avoine former cookies. cuire 12 min à 180 °c. 240 kcal • 20 g protéines • 28 g glucides • 5 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Cookies protéinés chocolat-banane</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">240 kcal • 20 g protéines • 28 g glucides • 5 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">240 kcal</span><span class="chip">20 g prot</span><span class="chip">28 g gluc</span><span class="chip">5 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>1 banane</li><li>30 g whey chocolat</li><li>40 g farine d’avoine</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Former cookies.</li><li>Cuire 12 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-fondant protéiné au chocolat 30 g whey chocolat 1 œuf 10 g cacao 30 ml lait d’amande mélanger. cuire 10 min à 180 °c. 230 kcal • 22 g protéines • 8 g glucides • 6 g lipides" data-hay="fondant protéiné au chocolat 30 g whey chocolat 1 œuf 10 g cacao 30 ml lait d’amande mélanger. cuire 10 min à 180 °c. 230 kcal • 22 g protéines • 8 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Fondant protéiné au chocolat</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">230 kcal • 22 g protéines • 8 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">230 kcal</span><span class="chip">22 g prot</span><span class="chip">8 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>30 g whey chocolat</li><li>1 œuf</li><li>10 g cacao</li><li>30 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 10 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-flan protéiné 250 ml lait écrémé 30 g whey vanille 1 œuf mélanger. cuire 25 min à 180 °c. 210 kcal • 24 g protéines • 12 g glucides • 4 g lipides" data-hay="flan protéiné 250 ml lait écrémé 30 g whey vanille 1 œuf mélanger. cuire 25 min à 180 °c. 210 kcal • 24 g protéines • 12 g glucides • 4 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Flan protéiné</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">210 kcal • 24 g protéines • 12 g glucides • 4 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">210 kcal</span><span class="chip">24 g prot</span><span class="chip">12 g gluc</span><span class="chip">4 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>250 ml lait écrémé</li><li>30 g whey vanille</li><li>1 œuf</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire 25 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-mousse protéinée au chocolat 200 g fromage blanc 0 % 30 g whey chocolat édulcorant mélanger. réfrigérer 30 min. 220 kcal • 26 g protéines • 10 g glucides • 3 g lipides" data-hay="mousse protéinée au chocolat 200 g fromage blanc 0 % 30 g whey chocolat édulcorant mélanger. réfrigérer 30 min. 220 kcal • 26 g protéines • 10 g glucides • 3 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Mousse protéinée au chocolat</h3>
+    <span class="tag">BLOC-D</span>
+  </div>
+  <div class="card-body">220 kcal • 26 g protéines • 10 g glucides • 3 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">26 g prot</span><span class="chip">10 g gluc</span><span class="chip">3 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g fromage blanc 0 %</li><li>30 g whey chocolat</li><li>Édulcorant</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Réfrigérer 30 min.</li></ol>
+    </div>
+  </details>
+</article>
+</div>
+</section>
+
+
+<section id="bloc-e" class="fade-in">
+  <div class="section-head">
+    <div>
+      <h2>Bloc E — Recettes bonus</h2>
+      <p>9 recettes</p>
+    </div>
+  </div>
+  <div class="grid">
+<article class="card recipe-card" id="recipe-poulet teriyaki protéiné 200 g blanc de poulet 40 ml sauce soja légère 10 g miel 1 c. à café huile de sésame 200 g riz cuit brocolis mélanger la sauce. mariner le poulet. cuire à la poêle. servir avec riz et brocolis. 480 kcal • 45 g protéines • 55 g glucides • 10 g lipides" data-hay="poulet teriyaki protéiné 200 g blanc de poulet 40 ml sauce soja légère 10 g miel 1 c. à café huile de sésame 200 g riz cuit brocolis mélanger la sauce. mariner le poulet. cuire à la poêle. servir avec riz et brocolis. 480 kcal • 45 g protéines • 55 g glucides • 10 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Poulet teriyaki protéiné</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">480 kcal • 45 g protéines • 55 g glucides • 10 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">480 kcal</span><span class="chip">45 g prot</span><span class="chip">55 g gluc</span><span class="chip">10 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g blanc de poulet</li><li>40 ml sauce soja légère</li><li>10 g miel</li><li>1 c. à café huile de sésame</li><li>200 g riz cuit</li><li>Brocolis</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger la sauce.</li><li>Mariner le poulet.</li><li>Cuire à la poêle.</li><li>Servir avec riz et brocolis.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-quiche sans pâte au thon 3 œufs 150 g thon 200 g fromage blanc 0 % 100 g courgette 30 g fromage light mélanger. verser dans un moule. cuire 30 min à 180 °c. 220 kcal • 25 g protéines • 6 g glucides • 8 g lipides" data-hay="quiche sans pâte au thon 3 œufs 150 g thon 200 g fromage blanc 0 % 100 g courgette 30 g fromage light mélanger. verser dans un moule. cuire 30 min à 180 °c. 220 kcal • 25 g protéines • 6 g glucides • 8 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Quiche sans pâte au thon</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">220 kcal • 25 g protéines • 6 g glucides • 8 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">220 kcal</span><span class="chip">25 g prot</span><span class="chip">6 g gluc</span><span class="chip">8 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>3 œufs</li><li>150 g thon</li><li>200 g fromage blanc 0 %</li><li>100 g courgette</li><li>30 g fromage light</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Verser dans un moule.</li><li>Cuire 30 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-wrap saumon fumé &amp; fromage frais 1 wrap complet 60 g saumon fumé 40 g fromage frais light salade tartiner. ajouter garniture. rouler. 280 kcal • 22 g protéines • 28 g glucides • 9 g lipides" data-hay="wrap saumon fumé &amp; fromage frais 1 wrap complet 60 g saumon fumé 40 g fromage frais light salade tartiner. ajouter garniture. rouler. 280 kcal • 22 g protéines • 28 g glucides • 9 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Wrap saumon fumé &amp; fromage frais</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">280 kcal • 22 g protéines • 28 g glucides • 9 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">280 kcal</span><span class="chip">22 g prot</span><span class="chip">28 g gluc</span><span class="chip">9 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>1 wrap complet</li><li>60 g saumon fumé</li><li>40 g fromage frais light</li><li>Salade</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Tartiner.</li><li>Ajouter garniture.</li><li>Rouler.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-salade de lentilles &amp; poulet 150 g lentilles 200 g poulet tomates cerises 1 c. à café huile d’olive assembler tous les ingrédients. 400 kcal • 40 g protéines • 35 g glucides • 12 g lipides" data-hay="salade de lentilles &amp; poulet 150 g lentilles 200 g poulet tomates cerises 1 c. à café huile d’olive assembler tous les ingrédients. 400 kcal • 40 g protéines • 35 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Salade de lentilles &amp; poulet</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">400 kcal • 40 g protéines • 35 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">400 kcal</span><span class="chip">40 g prot</span><span class="chip">35 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>150 g lentilles</li><li>200 g poulet</li><li>Tomates cerises</li><li>1 c. à café huile d’olive</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler tous les ingrédients.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-poke bowl crevettes &amp; edamame 200 g crevettes 150 g riz 80 g edamame avocat sauce soja assembler dans un bol. 450 kcal • 38 g protéines • 48 g glucides • 12 g lipides" data-hay="poke bowl crevettes &amp; edamame 200 g crevettes 150 g riz 80 g edamame avocat sauce soja assembler dans un bol. 450 kcal • 38 g protéines • 48 g glucides • 12 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Poke bowl crevettes &amp; edamame</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">450 kcal • 38 g protéines • 48 g glucides • 12 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">450 kcal</span><span class="chip">38 g prot</span><span class="chip">48 g gluc</span><span class="chip">12 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g crevettes</li><li>150 g riz</li><li>80 g edamame</li><li>Avocat</li><li>Sauce soja</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler dans un bol.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-gaufres protéinées vanille 50 g farine d’avoine 30 g whey vanille 1 œuf 100 ml lait d’amande mélanger. cuire au gaufrier. 280 kcal • 26 g protéines • 30 g glucides • 6 g lipides" data-hay="gaufres protéinées vanille 50 g farine d’avoine 30 g whey vanille 1 œuf 100 ml lait d’amande mélanger. cuire au gaufrier. 280 kcal • 26 g protéines • 30 g glucides • 6 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Gaufres protéinées vanille</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">280 kcal • 26 g protéines • 30 g glucides • 6 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">280 kcal</span><span class="chip">26 g prot</span><span class="chip">30 g gluc</span><span class="chip">6 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>50 g farine d’avoine</li><li>30 g whey vanille</li><li>1 œuf</li><li>100 ml lait d’amande</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Mélanger.</li><li>Cuire au gaufrier.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-pain pita protéiné maison 200 g farine complète 30 g whey neutre 120 ml eau levure former pâte. laisser lever. cuire à la poêle. 200 kcal • 12 g protéines • 32 g glucides • 2 g lipides" data-hay="pain pita protéiné maison 200 g farine complète 30 g whey neutre 120 ml eau levure former pâte. laisser lever. cuire à la poêle. 200 kcal • 12 g protéines • 32 g glucides • 2 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Pain pita protéiné maison</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">200 kcal • 12 g protéines • 32 g glucides • 2 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">200 kcal</span><span class="chip">12 g prot</span><span class="chip">32 g gluc</span><span class="chip">2 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g farine complète</li><li>30 g whey neutre</li><li>120 ml eau</li><li>Levure</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Former pâte.</li><li>Laisser lever.</li><li>Cuire à la poêle.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-soupe de pois cassés protéinée 200 g pois cassés oignon carotte 100 g poulet cuire 30 min. mixer. 180 kcal • 20 g protéines • 22 g glucides • 2 g lipides" data-hay="soupe de pois cassés protéinée 200 g pois cassés oignon carotte 100 g poulet cuire 30 min. mixer. 180 kcal • 20 g protéines • 22 g glucides • 2 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Soupe de pois cassés protéinée</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">180 kcal • 20 g protéines • 22 g glucides • 2 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">180 kcal</span><span class="chip">20 g prot</span><span class="chip">22 g gluc</span><span class="chip">2 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>200 g pois cassés</li><li>Oignon</li><li>Carotte</li><li>100 g poulet</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Cuire 30 min.</li><li>Mixer.</li></ol>
+    </div>
+  </details>
+</article>
+
+<article class="card recipe-card" id="recipe-crumble protéiné pomme–cannelle 3 pommes 40 g farine d’avoine 30 g whey vanille 20 g beurre léger cannelle assembler. cuire 20 min à 180 °c. 200 kcal • 15 g protéines • 28 g glucides • 4 g lipides" data-hay="crumble protéiné pomme–cannelle 3 pommes 40 g farine d’avoine 30 g whey vanille 20 g beurre léger cannelle assembler. cuire 20 min à 180 °c. 200 kcal • 15 g protéines • 28 g glucides • 4 g lipides" onclick="this.scrollIntoView({behavior:\'smooth\', block:\'start\'});">
+  <div class="card-top">
+    <h3>Crumble protéiné pomme–cannelle</h3>
+    <span class="tag">BLOC-E</span>
+  </div>
+  <div class="card-body">200 kcal • 15 g protéines • 28 g glucides • 4 g lipides</div>
+  <div class="macro-row" aria-label="Macros"><span class="chip">200 kcal</span><span class="chip">15 g prot</span><span class="chip">28 g gluc</span><span class="chip">4 g lip</span></div>
+  <details>
+    <summary>
+      <span style="color:#ffd6b8; font-weight:600">Détails</span>
+      <span class="chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="details-inner">
+      <h4>Ingrédients</h4>
+      <ul><li>3 pommes</li><li>40 g farine d’avoine</li><li>30 g whey vanille</li><li>20 g beurre léger</li><li>Cannelle</li></ul>
+      <h4>Préparation</h4>
+      <ol><li>Assembler.</li><li>Cuire 20 min à 180 °C.</li></ol>
+    </div>
+  </details>
+</article>
+</div>
+</section>
+</div>
+
+    <div class="footer">
+      <div>© Coach Will – Reboot 90 • Version HTML autonome</div>
+      <div style="margin-top:6px; opacity:.9">Conseil : imprime en PDF depuis ton navigateur si tu veux une version “livre” à partager.</div>
+    </div>
+  </main>
+
+  
+
+
+
+
+
+
+<script>
+  const search = document.getElementById("search");
+  const cards = Array.from(document.querySelectorAll(".recipe-card"));
+  const resultsBox = document.getElementById("searchResults");
+
+  function normalize(s){ return (s||"").toString().toLowerCase().trim(); }
+
+  function getCardInfo(card){
+    // Title in h3, block tag in .tag
+    const name = (card.querySelector("h3")?.textContent || "").trim();
+    const tag = (card.querySelector(".tag")?.textContent || "").trim(); // ex: BLOC-A
+    const block = tag.replace("BLOC-","Bloc ").replace("BLOC_","Bloc ").replace("BLOC","Bloc");
+    const macro = (card.querySelector(".card-body")?.textContent || "").trim();
+    return {name, block: block || tag, macro};
+  }
+
+  function applyFilter(){
+    const q = normalize(search.value);
+    cards.forEach(c => {
+      const hay = (c.getAttribute("data-hay") || "");
+      const match = (!q || hay.includes(q));
+      c.style.display = match ? "" : "none";
+    });
+  }
+
+  function renderResults(){
+    const q = normalize(search.value);
+    if(!q){
+      resultsBox.hidden = true;
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    // Find matches (limit to 10)
+    const matches = [];
+    for(const c of cards){
+      const hay = (c.getAttribute("data-hay") || "");
+      if(hay.includes(q)){
+        const info = getCardInfo(c);
+        matches.push({card:c, ...info});
+        if(matches.length >= 10) break;
+      }
+    }
+
+    if(matches.length === 0){
+      resultsBox.hidden = false;
+      resultsBox.innerHTML = '<div class="sr-empty">Aucune recette trouvée. Essaie un autre mot (ex: whey, poulet, avoine…).<\/div>';
+      return;
+    }
+
+    resultsBox.hidden = false;
+    resultsBox.innerHTML = matches.map((m, idx) => {
+      const safeName = escapeHtml(m.name);
+      const safeMeta = escapeHtml(m.macro || "");
+      const safeBlock = escapeHtml((m.block || "").toUpperCase());
+      return `
+        <div class="sr-item" role="option" data-idx="${idx}">
+          <div class="sr-left">
+            <div class="sr-name">${safeName}<\/div>
+            <div class="sr-meta">${safeMeta}<\/div>
+          <\/div>
+          <div class="sr-pill">${safeBlock}<\/div>
+        <\/div>
+      `;
+    }).join("");
+
+    // Click behavior
+    const items = Array.from(resultsBox.querySelectorAll(".sr-item"));
+    items.forEach(item => {
+      item.addEventListener("click", () => {
+        const i = parseInt(item.getAttribute("data-idx"), 10);
+        const match = matches[i];
+        if(match && match.card){
+          // Keep the filter applied, then jump to the chosen recipe
+          applyFilter();
+          match.card.scrollIntoView({behavior:"smooth", block:"start"});
+          // Close dropdown
+          resultsBox.hidden = true;
+        }
+      });
+    });
+  }
+
+  // Input: filter + dropdown
+  let t;
+  search.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      applyFilter();
+      renderResults();
+    }, 120);
+  });
+
+  // Enter: go to first dropdown result if visible, otherwise first visible card
+  search.addEventListener("keydown", (e) => {
+    if(e.key !== "Enter") return;
+    e.preventDefault();
+
+    const firstItem = resultsBox.hidden ? null : resultsBox.querySelector(".sr-item");
+    if(firstItem){
+      firstItem.click();
+      return;
+    }
+    // fallback
+    const firstVisible = cards.find(c => c.style.display !== "none");
+    if(firstVisible){
+      firstVisible.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+  });
+
+  // Click outside closes dropdown
+  document.addEventListener("click", (e) => {
+    const wrap = search.parentElement;
+    if(!wrap.contains(e.target)){
+      resultsBox.hidden = true;
+    }
+  });
+
+  // Navigation boutons (ancres) : rien à changer, fonctionne déjà.
+  // Helper
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+</script>
+
+</body>
+</html>
